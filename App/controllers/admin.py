@@ -7,11 +7,9 @@ def add_admin(username, password, email):
     # Check if there are no other users with the same username or email values in any other subclass
         if (
             Alumni.query.filter_by(username=username).first() is not None or
-            # Admin.query.filter_by(username=username).first() is not None or
             Company.query.filter_by(username=username).first() is not None or
 
             Company.query.filter_by(email=email).first() is not None or
-            # Admin.query.filter_by(email=email).first() is not None
             Alumni.query.filter_by(email=email).first() is not None
             
         ):
@@ -62,17 +60,3 @@ def delete_listing(listing_id):
         return True
 
     return None
-
-# def delete_exerciseSet(exerciseSet_id):
-
-#     exerciseSets = ExerciseSet.query.filter_by(id=exerciseSet_id).all()
-
-#     if exerciseSets is not None:
-#         for exerciseSet in exerciseSets:
-#             db.session.delete(exerciseSet)
-        
-#             db.session.commit()
-#         return True
-#     return None
-
-# edit other listings

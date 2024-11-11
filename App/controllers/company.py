@@ -9,9 +9,6 @@ def add_company(username, company_name, password, email, company_address, contac
         if (
             Alumni.query.filter_by(username=username).first() is not None or
             Admin.query.filter_by(username=username).first() is not None or
-            # Company.query.filter_by(username=username).first() is not None or
-
-            # Company.query.filter_by(email=email).first() is not None or
             Admin.query.filter_by(email=email).first() is not None or
             Alumni.query.filter_by(email=email).first() is not None
             
@@ -36,10 +33,8 @@ def send_notification(job_categories=None):
 
     # list of alumni to be notified
     notif_alumni = []
-    # print(job_categories)
 
     for alumni in subbed:
-        # print('alumni')
         # get a set of all the job categories the alumni is subscribed for
         jobs = set(alumni.get_categories())
         common_jobs = []
@@ -49,14 +44,11 @@ def send_notification(job_categories=None):
         # if there are common jobs shared in the intersection, then add that alumni the list to notify
         if common_jobs:
             notif_alumni.append(alumni)
-        # else:
-        #     print('no commmon jobs: ', alumni, ' and ', job_categories)
 
-    # do notification send here? use mail chimp?
     print(notif_alumni, job_categories)
     return notif_alumni, job_categories
 
-def add_listing(title, description, company_name, #, job_categories=None
+def add_listing(title, description, company_name, 
                 salary, position, remote, ttnational, desiredcandidate, area, job_categories=None):
 
     # manually validate that the company actually exists
@@ -70,14 +62,8 @@ def add_listing(title, description, company_name, #, job_categories=None
         db.session.add(newListing)
         db.session.commit()
 
-        # print('get_all_subscribed_alumn')
-        # send_notification(job_categories)
-        # send_notification(newListing.get_categories())
-
-        # print('yah')
         return newListing
     except:
-        # print('nah')
         db.session.rollback()
         return None
 
@@ -85,11 +71,8 @@ def get_company_by_name(company_name):
     return Company.query.filter_by(company_name=company_name).first()
 
 def get_company_listings(company_name):
-    # return Listing.query.filter_by(company_name=company_name)
     company = get_company_by_name(company_name)
     
-    # for listing in company.listings:
-    #     print(listing.get_json())
     return company.listings
 
 def get_all_companies():
