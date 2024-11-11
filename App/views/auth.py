@@ -55,23 +55,8 @@ def login_action():
   else:
     flash('Invalid username or password', 'unsuccessful'), 401  # send message to next page
 
-#   csrf_token = generate_csrf()
-#   response.headers["X-CSRF-TOKEN"] = csrf_token
-
   print('response headers: ', response.headers)
   return response
-
-# @auth_views.route('/login', methods=['POST'])
-# def login_action():
-#     data = request.form
-#     token = login(data['username'], data['password'])
-#     response = redirect(request.referrer)
-#     if not token:
-#         flash('Bad username or password given'), 401
-#     else:
-#         flash('Login Successful')
-#         set_access_cookies(response, token) 
-#     return response
 
 @auth_views.route('/alumni-signup', methods=['POST'])
 def alumni_signup_action():
@@ -91,11 +76,7 @@ def alumni_signup_action():
     set_access_cookies(response, token)
     flash('Account created!', 'success')
 
-    # csrf_token = generate_csrf()
-    # response.headers["X-CSRF-TOKEN"] = csrf_token
-
   except Exception:  # attempted to insert a duplicate user
-    # db.session.rollback()
     flash("username or email already exists", 'unsuccessful')  # error message
     response = redirect(url_for('auth_views.login_page'))
 
@@ -108,8 +89,6 @@ def company_signup_action():
   response = None
 
   try:
-    # newAlumni = add_alumni(data['username'], data['password'], data['email'],
-    #                       data['alumni_id'], data['contact'], data['firstname'], data['lastname'])
     newCompany = add_company(data['username'], data['company_name'], data['password'], data['email'],
                              data['company_address'], data['contact'], data['company_website'])
 
@@ -121,11 +100,7 @@ def company_signup_action():
     set_access_cookies(response, token)
     flash('Account created!', 'success')
 
-    # csrf_token = generate_csrf()
-    # response.headers["X-CSRF-TOKEN"] = csrf_token
-
   except Exception:  # attempted to insert a duplicate user
-    # db.session.rollback()
     flash("username or email already exists", 'unsuccessful')  # error message
     response = redirect(url_for('auth_views.login_page'))
 

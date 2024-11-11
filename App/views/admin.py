@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for, flash
 from App.models import db
-# from App.controllers import create_user
 
 from flask_jwt_extended import jwt_required, current_user, unset_jwt_cookies, set_access_cookies
 
@@ -25,13 +24,6 @@ from App.models import(
 
 admin_views = Blueprint('admin_views', __name__, template_folder='../templates')
 
-# handle publish
-
-
-# handle unpublish
-
-
-# handle deletion
 @admin_views.route('/delete_listing/<int:job_id>', methods=['GET'])
 @jwt_required()
 def delete_listing_action(job_id):
@@ -48,21 +40,3 @@ def delete_listing_action(job_id):
         response = (redirect(url_for('index_views.login_page')))
 
     return response
-
-
-# @index_views.route('/delete-exercise/<int:exercise_id>', methods=['GET'])
-# @login_required
-# def delete_exercise_action(exercise_id):
-    
-#     user = current_user
-
-#     res = delete_exerciseSet(exercise_id)
-
-#     if res == None:
-#         flash('Invalid or unauthorized')
-#     else:
-#         flash('exercise deleted!')
-#     return redirect(url_for('user_views.userInfo_page'))
-
-
-# handle updates

@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify, url_for, flash
 from App.models import db
-# from App.controllers import create_user
 
 from flask_jwt_extended import jwt_required, current_user, unset_jwt_cookies, set_access_cookies
 
@@ -32,8 +31,6 @@ def view_applications_page(job_id):
     # get the listing
     listing = get_listing(job_id)
 
-    # applicants = listing.get_applicants()
-
     response = None
     print(listing)
 
@@ -51,22 +48,15 @@ def view_applications_page(job_id):
 @company_views.route('/add_listing', methods=['GET'])
 @jwt_required()
 def add_listing_page():
-    # username = get_jwt_identity()
-    # user = get_user_by_username(username)
 
     return render_template('companyform.html')
 
 @company_views.route('/add_listing', methods=['POST'])
 @jwt_required()
 def add_listing_action():
-    # username = get_jwt_identity()
-    # user = get_user_by_username(username)
     data = request.form
 
     response = None
-
-    # print(data)
-    # print(current_user.company_name)
 
     try:
         remote = False
@@ -80,7 +70,6 @@ def add_listing_action():
 
         listing = add_listing(data['title'], data['description'], current_user.company_name, data['salary'], data['position_type'],
                               remote, national, data['desired_candidate_type'], data['job_area'], None)
-        # print(listing)
         flash('Created job listing', 'success')
         response = redirect(url_for('index_views.index_page'))
     except Exception:
