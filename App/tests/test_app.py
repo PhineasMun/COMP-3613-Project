@@ -31,10 +31,6 @@ LOGGER = logging.getLogger(__name__)
 '''
 class UserUnitTests(unittest.TestCase):
 
-    # def test_new_user(self):
-    #     user = User("bob", "bobpass")
-    #     assert user.username == "bob"
-
     def test_new_admin(self):
         admin = Admin('bob', 'bobpass', 'bob@mail')
         assert admin.username == "bob"
@@ -113,24 +109,11 @@ class UsersIntegrationTests(unittest.TestCase):
         alumni = subscribe('123456789', 'Database Manager')
         assert alumni.subscribed == True
 
-    # def test_czadd_categories(self):
-
-    #     alumni = add_categories('123456789', ['Database'])
-
-    #     assert alumni.get_categories() == ['Database']
-
     def test_czapply_listing(self):
 
         alumni = apply_listing('123456789', 1)
 
         assert get_all_applicants('1')  == [get_alumni('123456789')]
-
-
-    # def get_all_applicants(self):
-
-    #     applicants = get_all_applicants('1')
-
-    
 
     def test_get_all_users_json(self):
         users_json = get_all_users_json()
@@ -141,19 +124,3 @@ class UsersIntegrationTests(unittest.TestCase):
             {"id":1, "company_name":"company1", "email":"company@mail", 'company_address':'company_address','contact':'contact',
             'company_website':'company_website.com'}
             ], users_json)
-
-    # def test_create_user(self):
-    #     user = create_user("rick", "bobpass")
-    #     assert user.username == "rick"
-
-    # def test_get_all_users_json(self):
-    #     users_json = get_all_users_json()
-    #     self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
-
-    # # Tests data changes in the database
-    # def test_update_user(self):
-    #     update_user(1, "ronnie")
-    #     user = get_user(1)
-    #     assert user.username == "ronnie"
-        
-
