@@ -1,8 +1,6 @@
 from App.models import Listing, Company
 from App.database import db
 
-# add in getters, maybe put setters in company controllers
-
 def set_request(id, request):
     listing = get_listing(id)
 
@@ -37,5 +35,3 @@ def get_all_listings_json():
         return []
     listings = [listing.get_json() for listing in listings]
     return listings
-
-# get all listings by company name
