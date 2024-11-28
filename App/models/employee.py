@@ -1,34 +1,40 @@
-from werkzeug.security import check_password_hash, generate_password_hash
 from App.database import db
 from .user import User
 
 class Employee(User):
     employee_id = db.Column(db.String, unique=True, nullable=False)
 
-    employee_name = db.Column(db.String(120), nullable=False)
+    first_name = db.Column(db.String(120), nullable=False)
 
-    employee_password = db.Column(db.String(120), nullable=False)
+    last_name = db.Column(db.String(120), nullable=False)
+
+    department = db.Column(db.String(120), nullable=False)
+
+    subscribed = db.Column(db.Boolean, default=False)
 
 
 def __init__(self, employee_id, employee_name, employee_password):
         self.employee_id = employee_id
-        self.employee_name = employee_name
-        self.set_password(employee_password)
+        self.first_name = first_name
+        self.last_name = last_name
+        self.department = department
+        self.subscribed = subscribed
 
 def get_json(self):
         return{
-            'id': self.employee_id,
-            'name': self.employee_name,
+            'id': self.id,
+            'username': self.username
+            'email': self.email
+            'employeeid': self.employee_id,
+            'firstname': self.first_name,
+            'lastname': self.last_name,
+            'department': self.department,
+            'subscribed': self.subscribed
             
         }
     
-def get_name(self):
-        return self.employee_name
 
-def set_password(self, password):
-        """Create hashed password."""
-        self.employee_password = generate_password_hash(password, method='sha256')
-    
-def check_password(self, password):
-        """Check hashed password."""
-        return check_password_hash(self.employee_password, password)
+
+def get_eployee_id(self):
+        return self.employee_id
+
