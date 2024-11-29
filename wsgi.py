@@ -11,6 +11,7 @@ from App.controllers import ( create_user, get_all_users_json, get_all_users, ge
      is_alumni_subscribed, send_notification, apply_listing, get_all_applicants,
      get_user_by_username, get_user, get_listing, delete_listing, subscribe, unsubscribe,
      login)
+from App.views.alumni import subscribe_action
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
@@ -36,42 +37,26 @@ def initialize():
 
     # add in alumni
     add_alumni('rob', 'robpass', 'rob@mail', '123456789', '1868-333-4444', 'robfname', 'roblname')
-
-    # add_alumni('rooooob', 'robpass', 'roooooob@mail', '123456089')
-
-    # add_categories('123456789', ['Database'])
-    # print('test')
-
-    # remove_categories('123456789', ['N/A'])
-    # remove_categories('123456789', ['Database'])
-    
-
-    # subscribe rob
-    # subscribe_action('123456789', ['Software Engineer'])
-
-    # subscribe('123456789', 'Database Manager')
-    # unsubscribe('123456789')
-
     
 
     # add in companies
-    add_company('company1', 'company1', 'compass', 'company@mail',  'company_address', 'contact', 'company_website.com')
-    add_company('company2', 'company2', 'compass', 'company@mail2',  'company_address2', 'contact2', 'company_website2.com')
+    add_company('BeachTech', 'company_address', 'contact', 'company_website.com')
+    add_company('SpaceCo', 'company_address2', 'contact2', 'company_website2.com')
 
     # add in listings
     # listing1 = add_listing('listing1', 'job description', 'company2')
     # print(listing1, 'test')
-    add_listing('listing1', 'job description1', 'company1',
+    add_listing('listing1', 'job description1', 'BeachTeach',
                 8000, 'Part-time', True, True, 'desiredCandidate?', 'Curepe', ['Database Manager', 'Programming', 'butt'])
 
-    add_listing('listing2', 'job description', 'company2',
+    add_listing('listing2', 'job description', 'SpaceCo',
                 4000, 'Full-time', True, True, 'desiredCandidate?', 'Curepe', ['Database Manager', 'Programming', 'butt'])
 
     
 
 
     # print(get_all_listings_json())
-    print(get_company_listings('company2'))
+    print(get_company_listings('SpaceCo'))
     
 
     print(get_all_subscribed_alumni())
@@ -231,19 +216,18 @@ def list_company_command(format):
         print(get_all_companies_json())
 
 # flask company add
-@company_cli.command("add", help = "Add an copmany object to the database")
-@click.argument("username", default="representative name")
+@company_cli.command("add", help="Add a company object to the database")
 @click.argument("company_name", default="aah pull")
-@click.argument("password", default="password")
-@click.argument("email", default="aahpull@mail")
-# @click.argument("job_categories", default='Database')
-def add_company_command(username, company_name, password, email):
-    company = add_company(username, company_name, password, email)
+@click.argument("company_address", default="company address")
+@click.argument("contact", default="company contact")
+@click.argument("company_website", default="company_website.com")
+def add_company_command(company_name, company_address, contact, company_website):
+    company = add_company(company_name, company_address, contact, company_website)
 
     if company is None:
         print('Error creating company')
     else:
-        print(f'{company} created!')
+        print(f'{company.company_name} created!')
 
 
 app.cli.add_command(company_cli)
