@@ -23,12 +23,12 @@ def __init__(self, employee_id, employee_name, employee_password):
 def get_json(self):
         return{
             'id': self.id,
-            'username': self.username
-            'email': self.email
+            'username': self.username,
+            'email': self.email,
             'employeeid': self.employee_id,
             'firstname': self.first_name,
             'lastname': self.last_name,
-            'department': self.department,
+            'department': self.department
         #     'subscribed': self.subscribed
             
         }
