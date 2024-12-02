@@ -19,27 +19,11 @@ def get_user_by_username(username):
     admin = Admin.query.filter_by(username=username).first()
     if admin:
         user = admin
-    company = Company.query.filter_by(username=username).first()
-    if company:
-        user = company
+    #company = Company.query.filter_by(username=username).first()
+    #if company:
+        #user = company
     
     return user
-
-# def get_user_by_username(username):
-#     # Define the polymorphic loading to include all subclasses of User
-#     polymorphic_query = with_polymorphic(User, [User, Admin, Alumni, Company])
-
-#     # Query using the polymorphic loading and filter by username
-#     user = polymorphic_query.query.filter_by(username=username).first()
-    
-#     return user
-
-# def get_user_by_username(username):
-#     # Debugging: Print the generated SQL query
-#     print(User.query.filter_by(username=username).first().statement)
-    
-#     # Attempt to retrieve the user by username
-#     return User.query.filter_by(username=username).first()
 
 def get_user(id):
     return User.query.get(id)
@@ -83,9 +67,9 @@ def get_user_by_username(username):
     admin = Admin.query.filter_by(username=username).first()
     if admin:
         user = admin
-    company = Company.query.filter_by(username=username).first()
-    if company:
-        user = company
+    #company = Company.query.filter_by(username=username).first()
+    #if company:
+        #user = company
     
     return user
 

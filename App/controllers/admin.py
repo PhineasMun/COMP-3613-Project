@@ -8,9 +8,9 @@ def add_admin(username, password, email):
         if (
             Alumni.query.filter_by(username=username).first() is not None or
             # Admin.query.filter_by(username=username).first() is not None or
-            Company.query.filter_by(username=username).first() is not None or
+            #Company.query.filter_by(username=username).first() is not None or
 
-            Company.query.filter_by(email=email).first() is not None or
+            #Company.query.filter_by(email=email).first() is not None or
             # Admin.query.filter_by(email=email).first() is not None
             Alumni.query.filter_by(email=email).first() is not None
             
