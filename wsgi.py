@@ -219,7 +219,7 @@ def list_employee_command(format):
         print(get_all_employees_json())
 
 # flask employee add
-@alumni_cli.command("add", help = "Add an employee object to the database")
+@employee_cli.command("add", help = "Add an employee object to the database")
 @click.argument("username", default="hob2")
 @click.argument("password", default="hobpass")
 @click.argument("email", default="hob@mail2")
@@ -227,7 +227,6 @@ def list_employee_command(format):
 @click.argument("first_name", default="fname")
 @click.argument("last_name", default="lname")
 @click.argument("department", default="Software Engineering")
-# @click.argument("job_categories", default='Database')
 def add_employee_command(username, password, email, employee_id, first_name, last_name, department):
     employee = add_employee(username, password, email, employee_id, first_name, last_name, department)
 
@@ -237,6 +236,7 @@ def add_employee_command(username, password, email, employee_id, first_name, las
         print(f'{employee} created!')
 
 
+app.cli.add_command(employee_cli)
 
 # company commands
 company_cli = AppGroup('company', help='Company object commands')
