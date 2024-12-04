@@ -39,7 +39,7 @@ def initialize():
     add_alumni('rob', 'robpass', 'rob@mail', '123456789', '1868-333-4444', 'robfname', 'roblname')
     
     #add in employee
-    # add_employee('hob', 'hobpass', 'hob@mail', '234567890', 'hobfname', 'hoblname', 'Accounting')
+    add_employee('hob', 'hobpass', 'hob@mail', '234567890', 'hobfname', 'hoblname', 'Accounting')
 
     # add in companies
     add_company('BeachTech', 'company_address', 'contact', 'company_website.com')
