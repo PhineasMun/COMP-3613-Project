@@ -34,7 +34,14 @@ def index_page():
     jobs = get_all_listings()
 
     if isinstance(current_user, Alumni):
-        return render_template('alumni.html', jobs=jobs )
+        set_modal_window = current_user.modal_window
+        if not set_modal_window:
+
+            #Alumini has not seen window yet therefore window is set to true.
+            return render_template('alumni.html', jobs=jobs, set_modal_window=True)
+        
+        #Alumini has seen the window already therefore window is set to false.
+        return render_template('alumni.html', jobs=jobs, set_modal_window=False)
     
     if isinstance(current_user, Company):
         jobs = get_company_listings(current_user.username)
