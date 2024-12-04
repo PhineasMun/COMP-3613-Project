@@ -12,8 +12,8 @@ class Alumni(User):
     # Define relationship to applications..... ~Tamia
     #[-----------HERE----------]
 
-    # relationship to listings to receive notifications?
     subscribed = db.Column(db.Boolean, default=False)
+    modal_window = db.Column(db.Boolean,default=False)
 
     
 
@@ -22,6 +22,7 @@ class Alumni(User):
         self.alumni_id = alumni_id
         self.job_category = None
         self.subscribed = False
+        self.modal_window = False
         self.contact = contact
         self.firstname = firstname
         self.lastname = lastname
