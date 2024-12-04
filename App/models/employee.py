@@ -6,6 +6,9 @@ class Employee(User):
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
     department = db.Column(db.String(120), nullable=False)
+    # Relationship with Company (M-1)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.company_id'), nullable=False)
+    company = db.relationship('Company', back_populates='employees')
 
     def __init__(self, username, password, email, employee_id, first_name, last_name, department):
         super().__init__(username, password, email)
