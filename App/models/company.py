@@ -8,7 +8,7 @@ class Company(db.Model):
     company_website = db.Column(db.String(120))
 
     # set up relationship with Listing object (1-M)
-    listings = db.relationship('Listing', backref='company', lazy=True)
+    listings = db.relationship('Listing', back_populates='company', lazy=True)
     # Relationship with Employee (1-M)
     employees = db.relationship('Employee', back_populates='company', lazy=True)
 

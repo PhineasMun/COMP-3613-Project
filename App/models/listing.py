@@ -25,8 +25,8 @@ class Listing(db.Model):
     request = db.Column(db.String())
 
     # set up relationship with Company (M-1)
-    company_name = db.Column(db.String(), db.ForeignKey('company.company_name'), nullable=False)
-    companies = db.relationship('Company', back_populates='listings', overlaps="company")
+    company_id = db.Column(db.String(), db.ForeignKey('company.company_id'), nullable=False)
+    company = db.relationship('Company', back_populates='listings', overlaps="company")
 
     # Define relationship to applications..... ~Tamia
     #[-----------HERE----------]
@@ -108,3 +108,7 @@ class Listing(db.Model):
             'seen':self.seen,
             'approved':self.approved
         }
+
+    def notify_company_of_application(self, applicant_name):
+        company = self.companies[0]  # One company per listing
+        company.update(self, applicant_name)
