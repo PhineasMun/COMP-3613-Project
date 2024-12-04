@@ -9,6 +9,8 @@ class Company(db.Model):
 
     # set up relationship with Listing object (1-M)
     listings = db.relationship('Listing', backref='company', lazy=True)
+    # Relationship with Employee (1-M)
+    employees = db.relationship('Employee', back_populates='company', lazy=True)
 
 
     def __init__(self, company_name, company_address, contact, company_website):
