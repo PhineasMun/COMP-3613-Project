@@ -10,7 +10,7 @@ from App.controllers import ( create_user, get_all_users_json, get_all_users, ge
      get_all_alumni, get_all_alumni_json, get_all_listings, get_all_listings_json, get_company_listings, get_all_subscribed_alumni,
      is_alumni_subscribed, send_notification, apply_listing, get_all_applicants,
      get_user_by_username, get_user, get_listing, delete_listing, subscribe, unsubscribe,
-     login, add_employee)
+     login, add_employee, get_all_employees, get_all_employees_json)
 from App.views.alumni import subscribe_action
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -204,6 +204,39 @@ def apply_listing_command(alumni_id, listing_title):
         print(f'{alumni} applied to listing {listing_title}')
 
 app.cli.add_command(alumni_cli)
+
+
+# employee commands
+employee_cli = AppGroup('employee', help='Employee object commands')
+
+# flask employee list
+@employee_cli.command("list", help="Lists employees in the database")
+@click.argument("format", default="string")
+def list_employee_command(format):
+    if format == 'string':
+        print(get_all_employees())
+    else:
+        print(get_all_employees_json())
+
+# flask employee add
+@alumni_cli.command("add", help = "Add an employee object to the database")
+@click.argument("username", default="hob2")
+@click.argument("password", default="hobpass")
+@click.argument("email", default="hob@mail2")
+@click.argument("employee_id", default="876543210")
+@click.argument("first_name", default="fname")
+@click.argument("last_name", default="lname")
+@click.argument("department", default="Software Engineering")
+# @click.argument("job_categories", default='Database')
+def add_employee_command(username, password, email, employee_id, first_name, last_name, department):
+    employee = add_employee(username, password, email, employee_id, first_name, last_name, department)
+
+    if employee is None:
+        print('Error creating employee')
+    else:
+        print(f'{employee} created!')
+
+
 
 # company commands
 company_cli = AppGroup('company', help='Company object commands')
