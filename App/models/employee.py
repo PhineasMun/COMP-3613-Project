@@ -3,9 +3,9 @@ from .user import User
 
 class Employee(User):
     employee_id = db.Column(db.Integer, unique=True, nullable=False)
-    first_name = db.Column(db.String(120), nullable=True)
-    last_name = db.Column(db.String(120), nullable=True)
-    department = db.Column(db.String(120), nullable=True)
+    first_name = db.Column(db.String(120), nullable=False)
+    last_name = db.Column(db.String(120), nullable=False)
+    department = db.Column(db.String(120), nullable=False)
 
     def __init__(self, username, password, email, employee_id, first_name, last_name, department):
         super().__init__(username, password, email)
