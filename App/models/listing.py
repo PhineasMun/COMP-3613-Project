@@ -25,7 +25,7 @@ class Listing(db.Model):
     request = db.Column(db.String())
 
     # set up relationship with Company (M-1)
-    company_id = db.Column(db.String(), db.ForeignKey('company.company_id'), nullable=False)
+    company_name = db.Column(db.String(), db.ForeignKey('company.company_name'), nullable=False)
     company = db.relationship('Company', back_populates='listings', overlaps="company")
 
     # Define relationship to applications..... ~Tamia
