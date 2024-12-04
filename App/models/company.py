@@ -31,3 +31,13 @@ class Company(db.Model):
     
     def get_name(self):
         return self.company_name
+
+    #Updated to notify employees
+    def update(self, listing, applicant_name):
+        print(f"Company '{self.company_name}' notified of {applicant_name}'s application to '{listing.title}'")
+        self.forward_to_subscribed_employees(listing, applicant_name)
+    
+    def forward_to_subscribed_employees(self, listing, applicant_name):
+        for employee in self.employees:
+            if employee.subscribed:
+                print(f"Notification sent to {employee.first_name} {employee.last_name} about {applicant_name}'s application to '{listing.title}'")
