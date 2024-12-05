@@ -3,7 +3,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import db, create_db
-from App.models import User, Admin, Alumni, Company, Listing, Employee
+from unittest.mock import MagicMock, patch
+from App.models import User, Admin, Alumni, Company, Listing, Application, Employee
 from App.controllers import (
     create_user,
     get_all_users_json,
@@ -21,6 +22,10 @@ from App.controllers import (
     apply_listing,
     get_all_applicants,
     get_alumni,
+    add_employee, 
+    get_all_employees, 
+    get_all_employees_json, 
+    get_employee,
 )
 
 
@@ -73,6 +78,78 @@ class UserUnitTests(unittest.TestCase):
         password = "mypass"
         user = Admin("bob", password, 'bob@mail')
         assert user.check_password(password)
+
+class EmployeeControllerTest(unittest.TestCase):
+
+    @patch("App.controllers.db.session")  # Mock the database session
+    @patch("App.controllers.Alumni.query")
+    @patch("App.controllers.Admin.query")
+    @patch("App.controllers.Employee")
+    def test_add_employee_success(self, MockEmployee, MockAdminQuery, MockAlumniQuery, MockDBSession):
+        MockAlumniQuery.filter_by().first.return_value = None
+        MockAdminQuery.filter_by().first.return_value = None
+        new_employee = MockEmployee.return_value
+
+        result = add_employee("john_doe", "securepassword", "john@example.com", "EMP001", "John", "Doe", "HR")
+
+        MockEmployee.assert_called_once_with("john_doe", "securepassword", "john@example.com", "EMP001", "John", "Doe", "HR")
+        MockDBSession.add.assert_called_once_with(new_employee)
+        MockDBSession.commit.assert_called_once()
+        self.assertEqual(result, new_employee)
+
+    @patch("App.controllers.db.session")
+    @patch("App.controllers.Alumni.query")
+    @patch("App.controllers.Admin.query")
+    def test_add_employee_duplicate_username_or_email(self, MockAdminQuery, MockAlumniQuery, MockDBSession):
+        MockAlumniQuery.filter_by().first.return_value = MagicMock()  # Simulate duplicate username/email
+
+        result = add_employee("duplicate_user", "securepassword", "dup@example.com", "EMP002", "Jane", "Doe", "Finance")
+
+        self.assertIsNone(result)
+        MockDBSession.add.assert_not_called()
+        MockDBSession.commit.assert_not_called()
+
+    @patch("App.controllers.db.session")
+    def test_add_employee_database_error(self, MockDBSession):
+        MockDBSession.add.side_effect = Exception  # Simulate a database error
+
+        result = add_employee("error_user", "securepassword", "error@example.com", "EMP003", "Alice", "Smith", "IT")
+
+        self.assertIsNone(result)
+        MockDBSession.rollback.assert_called_once()
+
+    @patch("App.controllers.db.session")
+    @patch("App.controllers.Employee.query")
+    def test_get_all_employees(self, MockEmployeeQuery, MockDBSession):
+        mock_employees = [MagicMock(), MagicMock()]
+        MockEmployeeQuery.all.return_value = mock_employees
+
+        result = get_all_employees()
+
+        MockEmployeeQuery.all.assert_called_once()
+        self.assertEqual(result, mock_employees)
+
+    @patch("App.controllers.get_all_employees")
+    def test_get_all_employees_json(self, MockGetAllEmployees):
+        mock_employee_1 = MagicMock()
+        mock_employee_1.get_json.return_value = {"id": 1, "name": "John"}
+        mock_employee_2 = MagicMock()
+        mock_employee_2.get_json.return_value = {"id": 2, "name": "Jane"}
+        MockGetAllEmployees.return_value = [mock_employee_1, mock_employee_2]
+
+        result = get_all_employees_json()
+
+        self.assertEqual(result, [{"id": 1, "name": "John"}, {"id": 2, "name": "Jane"}])
+
+    @patch("App.controllers.Employee.query")
+    def test_get_employee(self, MockEmployeeQuery):
+        mock_employee = MagicMock()
+        MockEmployeeQuery.filter_by().first.return_value = mock_employee
+
+        result = get_employee("EMP001")
+
+        MockEmployeeQuery.filter_by.assert_called_once_with(employee_id="EMP001")
+        self.assertEqual(result, mock_employee)
 
 '''
     Integration Tests
