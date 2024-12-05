@@ -11,7 +11,8 @@ from App.controllers import(
     get_user_by_username,
     is_alumni_subscribed,
     subscribe,
-    unsubscribe
+    unsubscribe,
+    set_modal_window
 )
 
 from App.models import(
@@ -35,6 +36,7 @@ def subscribe_action():
 
     try:
         alumni = subscribe(current_user.alumni_id, data['category'])
+        set_modal_window(alumni.alumni_id)
         # print(alumni.get_json())
         response = redirect(url_for('index_views.index_page'))
         flash('Subscribed!', 'success')
@@ -68,6 +70,17 @@ def unsubscribe_action():
 
     return response
 
-# for unsubscribe route
-# get the user and their categories with user.get_categories
-# then call unsubscrive_action with user and their categores?
+#200 and 500 necessary for HTTP status 
+@alumni_views.route('/update_modal_window', methods=['POST'])
+@jwt_required()
+def modal_window():
+    try:
+        alumni = current_user  
+        set_modal_window(alumni.alumni_id)  
+        db.session.commit() 
+        return jsonify(message="Update successful."), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(message="Server error when updating modal."), 500
+	

@@ -1,27 +1,15 @@
-from App.models import User, Company, Listing, Alumni, Admin
+from App.models import Company, Listing, Alumni, Admin
 from App.database import db
 from App.controllers import get_all_subscribed_alumni
 
 
 
-def add_company(username, company_name, password, email, company_address, contact, company_website):
-    # Check if there are no other users with the same username or email values in any other subclass
-        if (
-            Alumni.query.filter_by(username=username).first() is not None or
-            Admin.query.filter_by(username=username).first() is not None or
-            # Company.query.filter_by(username=username).first() is not None or
+def add_company(company_name, company_address, contact, company_website):
 
-            # Company.query.filter_by(email=email).first() is not None or
-            Admin.query.filter_by(email=email).first() is not None or
-            Alumni.query.filter_by(email=email).first() is not None
-            
-        ):
-            return None  # Return None to indicate duplicates
-
-        newCompany= Company(username,company_name, password, email, company_address, contact, company_website)
-        try: # safetey measure for trying to add duplicate 
+        newCompany= Company(company_name, company_address, contact, company_website)
+        try: # safety measure for trying to add duplicate 
             db.session.add(newCompany)
-            db.session.commit()  # Commit to save the new  to the database
+            db.session.commit() 
             return newCompany
         except:
             db.session.rollback()
@@ -70,11 +58,6 @@ def add_listing(title, description, company_name, #, job_categories=None
         db.session.add(newListing)
         db.session.commit()
 
-        # print('get_all_subscribed_alumn')
-        # send_notification(job_categories)
-        # send_notification(newListing.get_categories())
-
-        # print('yah')
         return newListing
     except:
         # print('nah')

@@ -346,10 +346,10 @@
         {% endwith %}
     </div>
     <div class="container">
-        <div id="subpopup" class="popup-container">
+        <div id="subpopup" class="popup-container" data-set-modal-window="{{ set_modal_window }}">
             <div class="subpopup-content">
-                <h2>Wecome Alumni</h2>
- 
+                <h2>Welcome Alumni</h2>
+
                 <p>Welcome to the DCIT Job Board! Explore our curated job listings directly below. 
                 Whether you're a recent graduate or seasoned professional, find your perfect opportunity here. 
                 Stay updated by subscribing to our mailing list for the latest job postings. Start your journey to career success today!</p>
@@ -461,12 +461,12 @@
         </div>       
     </div>
     <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const jobCards = document.querySelectorAll('.job_card');
-    const searchInput = document.getElementById('searchInput');
-    const expandBtns = document.querySelectorAll('.expand-btn');
-    const applyBtns = document.querySelectorAll('.applyBtn'); // Select all apply buttons
-    const closeFormBtns = document.querySelectorAll('.close-btn'); // Select all close buttons
+    document.addEventListener("DOMContentLoaded", function() {
+        const jobCards = document.querySelectorAll('.job_card');
+        const searchInput = document.getElementById('searchInput');
+        const expandBtns = document.querySelectorAll('.expand-btn');
+        const applyBtns = document.querySelectorAll('.applyBtn'); // Select all apply buttons
+        const closeFormBtns = document.querySelectorAll('.close-btn'); // Select all close buttons
 
     expandBtns.forEach((expandBtn) => {
         expandBtn.addEventListener('click', function() {
@@ -537,7 +537,8 @@
             const subscribeButton = document.getElementById("subscribe-btn");
             const displayPopupButton = document.getElementById("displayPopup");
 
-            // Function to show the popup
+            const setModalWindow  = popupContainer.dataset.setModalWindow;
+
             function showPopup() {
                 popupContainer.style.display = "block";
             }
@@ -547,10 +548,9 @@
                 popupContainer.style.display = "none";
             }
 
-            // Show the popup when the page loads
-            showPopup();
-
-            closeButton.addEventListener("click", hidePopup);
+            //Previous code did not have this to which caused welcome modal to not close
+            if (setModalWindow === "True")
+                showPopup();
 
             displayPopupButton.addEventListener("click", showPopup);
 
@@ -571,7 +571,28 @@
                 console.log("Subscribing email:", emailInput, "Category:", categoryInput);
                 hidePopup();
             });
+        
+            closeButton.addEventListener("click", function () {
+                fetch("/update_modal_window", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("jwt_token")}` 
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message); 
+                        hidePopup(); 
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+
         });
+
+        
 
         // Hide flash messages after 5 seconds
         setTimeout(() => {

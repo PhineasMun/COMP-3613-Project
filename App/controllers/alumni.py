@@ -8,9 +8,9 @@ def add_alumni(username, password, email, alumni_id, contact, firstname, lastnam
         if (
             # Alumni.query.filter_by(username=username).first() is not None or
             Admin.query.filter_by(username=username).first() is not None or
-            Company.query.filter_by(username=username).first() is not None or
+            #Company.query.filter_by(username=username).first() is not None or
 
-            Company.query.filter_by(email=email).first() is not None or
+            #Company.query.filter_by(email=email).first() is not None or
             Admin.query.filter_by(email=email).first() is not None
             # Alumni.query.filter_by(email=email).first() is not None
             
@@ -84,7 +84,10 @@ def unsubscribe(alumni_id):
     return alumni
 
     
-
+def set_modal_window(alumni_id):
+    alumni = get_alumni(alumni_id)
+    alumni.modal_window = True
+    db.session.commit()
 
 
 # def subscribe_action(alumni_id, job_category=None):
