@@ -26,6 +26,8 @@ from App.controllers import (
     get_all_employees, 
     get_all_employees_json, 
     get_employee,
+    apply_to_listing,
+    add_info_to_application,
 )
 
 
@@ -222,6 +224,43 @@ class UsersIntegrationTests(unittest.TestCase):
             {"id":1, "company_name":"company1", "email":"company@mail", 'company_address':'company_address','contact':'contact',
             'company_website':'company_website.com'}
             ], users_json)
+
+
+    @pytest.fixture
+    def test_client():
+        app = create_app("testing")  # Assume "testing" config uses a test database
+        with app.test_client() as client:
+            with app.app_context():
+                db.create_all()  # Create tables in the test database
+                yield client
+                db.session.remove()
+                db.drop_all()  # Clean up the database after tests
+
+    def test_add_info_to_application_integration(test_client):
+    # Add a mock alumni and application to the database
+        alumni = Alumni(id=1, profile={"skills": "Python", "education": "CS"})
+        application = Application(id=1, alumni_id=1, additional_info=None)
+        db.session.add(alumni)
+        db.session.add(application)
+        db.session.commit()
+
+    # Call the function with valid data
+        additional_info = {"skills": "Python", "hobbies": "Reading"}
+        response = test_client.post(
+            "/add_info_to_application",  # Assume this is the API endpoint
+            json={"application_id": 1, "alumni_id": 1, "additional_info": additional_info}
+        )
+
+        # Check the application in the database
+        updated_application = Application.query.get(1)
+        assert updated_application.additional_info == {"skills": "Python"}
+
+    # Check response
+        assert response.status_code == 200
+        assert response.json == {"message": "Information added successfully!"}
+
+
+
 
     # def test_create_user(self):
     #     user = create_user("rick", "bobpass")
